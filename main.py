@@ -13,6 +13,7 @@ def webhook():
     print("Received JSON:", req)  # Debug line
 
     user_text = req.get('queryResult', {}).get('queryText', '')
+    print("Parsed equation text:", user_text)
 
     try:
         x = sp.symbols('x')
