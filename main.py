@@ -10,9 +10,10 @@ def index():
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(force=True)
-    print("Received JSON:", req)  # Debug line
+    print("Received JSON:", req)
 
     user_text = req.get('queryResult', {}).get('queryText', '')
+    user_text = user_text.lower().replace("solve", "").strip()  # Clean user input
     print("Parsed equation text:", user_text)
 
     try:
@@ -21,11 +22,12 @@ def webhook():
         solution = sp.solve(eq, x)
         answer = f"The solution is: x = {solution[0]}" if solution else "No solution found."
     except Exception as e:
-        print("Error:", e)  
+        print("Error:", e)
         answer = "Sorry, I couldn't solve that equation."
 
-    print("Returning answer:", answer)  
+    print("Returning answer:", answer)
     return jsonify({"fulfillmentText": answer})
+
     
 if __name__ == '__main__':
     import os
